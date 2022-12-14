@@ -1,10 +1,9 @@
 import clientPromise from '../../lib/mongodb'
-export default async (req, res) => {
+export default async (req, res, collection: string) => {
 	try {
 		const client = await clientPromise
 		const db = client.db('ESE')
-		const students = await db.collection('teachers').find({}).toArray()
-		res.json(students)
+		return db.collection(collection).find({}).toArray()
 	} catch (e) {
 		console.error(e)
 	}
