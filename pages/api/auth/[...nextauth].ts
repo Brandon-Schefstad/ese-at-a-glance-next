@@ -42,9 +42,10 @@ export default NextAuth({
 			else if (new URL(url).origin === baseUrl) return url
 			return baseUrl
 		},
-		// async session({ session, token, user }) {
-		// 	return '/test'
-		// },
+		async session({ session, token, user }) {
+			session.id = user.id
+			return Promise.resolve(session)
+		},
 		// async jwt({ token, user, account, profile, isNewUser }) {
 		// 	return token
 		// },

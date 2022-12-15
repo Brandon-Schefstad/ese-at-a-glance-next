@@ -1,7 +1,8 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import Login from '../src/components/Login'
-interface teacher {
+interface student {
+	_id: String
 	firstName: String
 	lastName: String
 	email: String
@@ -10,25 +11,30 @@ interface teacher {
 const dashboard = () => {
 	const [data, setData] = useState([])
 	const { data: session, status } = useSession()
-	console.log(session)
-	console.log(status)
+
 	useEffect(() => {
-		fetchData()
-	}, [])
+		const id = session?.id
+		fetchData(id)
+	}, [session])
+	console.log(session)
+
 	if (status === 'unauthenticated') {
 		return <p>Access Denied</p>
 	}
-	async function fetchData() {
-		fetch('http://localhost:3000/api/getTeachers')
-			.then((response) => response.json())
-			.then((data) => setData(data))
+
+	async function fetchData(id: string) {
+		if (id) {
+			fetch(`http://localhost:3000/api/getStudents/${id}`, {})
+				.then((response) => response.json())
+				.then((data) => setData(data))
+		}
 	}
-	console.log(data)
+
 	return (
 		<>
 			<Login />
-			{data.map((teacher: teacher) => {
-				return <h1>{teacher.firstName}</h1>
+			{data.map((teacher: student) => {
+				return <h1 key={teacher?._id}>{teacher?.firstName}</h1>
 			})}
 		</>
 	)
