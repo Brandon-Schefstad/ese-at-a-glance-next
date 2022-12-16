@@ -1,4 +1,5 @@
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import Login from '../src/components/Login'
 interface student {
@@ -9,6 +10,7 @@ interface student {
 }
 
 const dashboard = () => {
+	const { push, query, isReady } = useRouter()
 	const [data, setData] = useState([])
 	const { data: session, status } = useSession()
 
@@ -36,6 +38,7 @@ const dashboard = () => {
 			{data.map((teacher: student) => {
 				return <h1 key={teacher?._id}>{teacher?.firstName}</h1>
 			})}
+			<a href="/addNewStudent"> Go To Next Page</a>
 		</>
 	)
 }
